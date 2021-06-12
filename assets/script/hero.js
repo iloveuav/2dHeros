@@ -1,169 +1,170 @@
-
 const Input = {}
 const State = {
-    stand:1,
-    attack:2
+	stand: 1,
+	attack: 2,
 }
-const controlRatio = 0.005//控制系数
-const controlRotationAngle = 45//控制角度
-const controlRotaDurTime = 0.8//旋转时间
+const controlRatio = 0.005 //控制系数
+const controlRotationAngle = 45 //控制角度
+const controlRotaDurTime = 0.8 //旋转时间
 
-let angle = 0;
-let heroRotate = false;
+let angle = 0
+let heroMove = false
+let isBighero = false
 cc.Class({
-    extends: cc.Component,
-    properties: {
-    },
+	extends: cc.Component,
+	properties: {},
 
-    onLoad() {
-        this._speed = 1;
-        this.sp = cc.v2(0, 0);
-    
-        this.heroState = State.stand;
-        this.anima = 'idle'
-    
-        cc.systemEvent.on("keydown", this.onKeyDown, this);
-        cc.systemEvent.on("keyup", this.onKeyUp, this);
-      },
-      onDestroy() {
-        cc.systemEvent.off("keydown", this.onKeyDown, this);
-        cc.systemEvent.off("keyup", this.onKeyUp, this);
-      },
-      onKeyDown(e) {
-        Input[e.keyCode] = 1;
-      },
-      onKeyUp(e) {
-        Input[e.keyCode] = 0;
-      },
+	onLoad() {
+		this._speed = 1
+		this.sp = cc.v2(0, 0)
 
-      rotateLeft(){
-        // setTimeout(() => {
-        //   var rby = cc.rotateBy(controlRotaDurTime,controlRotationAngle);
-        //   console.log('rby: ', rby);
-        //   this.node.runAction(rby)
-        // }, 1);
-        var rby = cc.rotateBy(controlRotaDurTime,controlRotationAngle);
-        // setInterval(() => {
-        //   // cc.tween(this.node)
-        //   // .by(1,{scale:0,angle:85})
-        //   // .repeatForever()
-        //   // .start()
-        //   var rby = cc.rotateBy(controlRotaDurTime,controlRotationAngle);
-        //   //   console.log('rby: ', rby);
-        //     this.node.runAction(rby)
+		this.heroState = State.stand
+		this.anima = 'idle'
 
-        // }, 10);
-      if(heroRotate===false){
+		cc.systemEvent.on('keydown', this.onKeyDown, this)
+		cc.systemEvent.on('keyup', this.onKeyUp, this)
+	},
+	onDestroy() {
+		cc.systemEvent.off('keydown', this.onKeyDown, this)
+		cc.systemEvent.off('keyup', this.onKeyUp, this)
+	},
+	onKeyDown(e) {
+		Input[e.keyCode] = 1
+	},
+	onKeyUp(e) {
+		Input[e.keyCode] = 0
+	},
+
+	rotateLeft() {
+		// setTimeout(() => {
+		//   var rby = cc.rotateBy(controlRotaDurTime,controlRotationAngle);
+		//   console.log('rby: ', rby);
+		//   this.node.runAction(rby)
+		// }, 1);
+		// var rby = cc.rotateBy(controlRotaDurTime, controlRotationAngle)
+		// setInterval(() => {
+		//   // cc.tween(this.node)
+		//   // .by(1,{scale:0,angle:85})
+		//   // .repeatForever()
+		//   // .start()
+		//   var rby = cc.rotateBy(controlRotaDurTime,controlRotationAngle);
+		//   //   console.log('rby: ', rby);
+		//     this.node.runAction(rby)
+
+		// }, 10);
+		if (heroMove === false) {
+			cc.tween(this.node)
+				.by(controlRotaDurTime, { angle: controlRotationAngle })
+				.repeatForever()
+				.start()
+		} else {
+			return
+		}
+
+		// 一直重复执行下去
+	},
+	rotateRight() {
+		if (heroMove === false) {
+			cc.tween(this.node)
+				.by(1, { angle: -controlRotationAngle })
+				.repeatForever()
+				.start()
+		} else {
+			return
+		}
+	},
+	toSmallHero() {
         cc.tween(this.node)
-        .by(controlRotaDurTime,{angle:controlRotationAngle})
-.to(1,{scale:1,position:cc.v2(0,0)},{easing:"backOut"})
-        .repeatForever()
+        .to(1, { scale: 0.8, position: cc.v2(10, 100) })
         .start()
-      }else{
-        return
-      }
-       
-     
-        
-     
+        isBighero = false
+	},
+	toBigHero() {
+		cc.tween(this.node)
+			.to(1, { scale: 5, position: cc.v2(10, 100) })
+			.start()
+            isBighero = true
+	},
+	update(dt) {
+		this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
+		//处理复合方向
+		if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.w]) {
+			this.sp.x += -controlRatio
+			this.sp.y += controlRatio
+			this.rotateLeft()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
+			this.sp.x += controlRatio
+			this.sp.y += controlRatio
+			this.rotateRight()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
+			this.sp.x += controlRatio
+			this.sp.y += -controlRatio
+			this.rotateRight()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.s]) {
+			this.sp.x += -controlRatio
+			this.sp.y += -controlRatio
+			this.rotateLeft()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
+			this.sp.x += -controlRatio
 
-// 一直重复执行下去
+			this.rotateLeft()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
+			this.sp.x += controlRatio
+			this.rotateRight()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
+			this.sp.y += controlRatio
+		} else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
+			this.sp.y += -controlRatio
+		}  else {
+			this.sp.x = 0
+			this.sp.y = 0
+			rby = null
+			setTimeout(() => {
+				if (!heroMove) {
+					this.node.stopAllActions()
+				}
+			}, 300)
+			heroMove = false
+		}
 
-  
-      },
-      rotateRight(){
-        // setTimeout(() => {
-        //   var rby = cc.rotateBy(controlRotaDurTime,-controlRotationAngle);
-        //   console.log('rby: ', rby);
-        //   this.node.runAction(rby)
-        // }, 1);
+		if (this.sp.x) {
+			this.lv.x += this.sp.x * this._speed
+		} else {
+			// this.lv.x = 0
+		}
 
-        if(heroRotate===false){
-          cc.tween(this.node)
-          .by(1,{angle:-controlRotationAngle})
-          .repeatForever()
-          .start()
-        }else{
-          return
-        }
-      },
-      update(dt) {
-
-       
-        this.lv = this.node.getComponent(cc.RigidBody).linearVelocity;   
-//处理复合方向
-if(Input[cc.macro.KEY.a]&&Input[cc.macro.KEY.w]){
-  this.sp.x +=-controlRatio;
-  this.sp.y +=controlRatio;
-  this.rotateLeft();
-  heroRotate = true
+		if (this.sp.y) {
+			this.lv.y += this.sp.y * this._speed
+		} else {
+			// this.lv.y = 0
+		}
 
 
-}else if(Input[cc.macro.KEY.d]&&Input[cc.macro.KEY.w]){
-  this.sp.x +=controlRatio;
-  this.sp.y +=controlRatio;
-  this.rotateRight()
-  heroRotate = true
-}
-else if(Input[cc.macro.KEY.d]&&Input[cc.macro.KEY.s]){
-  this.sp.x +=controlRatio;
-  this.sp.y +=-controlRatio;
-  this.rotateRight()
-  heroRotate = true
-}
-else if(Input[cc.macro.KEY.a]&&Input[cc.macro.KEY.s]){
-  this.sp.x +=-controlRatio;
-  this.sp.y +=-controlRatio;
-  this.rotateLeft();
-  heroRotate = true
-}
-        else if(Input[cc.macro.KEY.a]||Input[cc.macro.KEY.left]){
-            this.sp.x +=-controlRatio;
-           
-            this.rotateLeft();
-            heroRotate = true
-        }else if(Input[cc.macro.KEY.d]||Input[cc.macro.KEY.right]){
-            this.sp.x +=controlRatio;
-            this.rotateRight()
-            heroRotate = true
-        }
-        else if(Input[cc.macro.KEY.w]||Input[cc.macro.KEY.up]){
-          this.sp.y +=controlRatio;
-      }
-      else if(Input[cc.macro.KEY.s]||Input[cc.macro.KEY.down]){
-        this.sp.y +=-controlRatio;
+        //控制技能等
+        if (Input[cc.macro.KEY.k]) {
+            if(isBighero){
+                heroMove = true
+				this.toSmallHero()
+            }
+             
+		} 
+
+       if (Input[cc.macro.KEY.l]) {
+        if(!isBighero){
+        heroMove = true
+        this.toBigHero()
+		}
     }
-   
-else{
-            this.sp.x=0
-            this.sp.y=0
-            rby = null
-            setTimeout(() => {
-              if(!heroRotate){
-                this.node.stopAllActions();
-              } 
-            }, 200);
-            heroRotate = false
-           
-                    }
-        if(this.sp.x){
-            this.lv.x += this.sp.x *this._speed
-        }else{
-            // this.lv.x = 0
-        }
-
-        if(this.sp.y){
-          this.lv.y += this.sp.y *this._speed
-      }else{
-          // this.lv.y = 0
-      }
-        this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
-      },
-      start() {}
-});
-
-
-
+		this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
+	},
+	start() {},
+})
 
 //收集
 //人物变大变小
