@@ -951,7 +951,7 @@
     "node": {
       "__id__": 16
     },
-    "_enabled": true,
+    "_enabled": false,
     "tag": 0,
     "_density": 1,
     "_sensor": false,
@@ -977,7 +977,7 @@
     "node": {
       "__id__": 16
     },
-    "_enabled": true,
+    "_enabled": false,
     "tag": 0,
     "_density": 1,
     "_sensor": false,
@@ -1003,7 +1003,7 @@
     "node": {
       "__id__": 16
     },
-    "_enabled": true,
+    "_enabled": false,
     "tag": 0,
     "_density": 1,
     "_sensor": false,
@@ -1056,7 +1056,7 @@
       "__id__": 15
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 24
@@ -1239,8 +1239,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -14.628,
-        5.805,
+        -151.851,
+        168.898,
         0,
         0,
         0,
@@ -1397,6 +1397,7 @@
     "mapNode": {
       "__id__": 15
     },
+    "tiledMap": null,
     "_id": "f7Bmhky45OOZKrH3Ccp5p+"
   },
   {
