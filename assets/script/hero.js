@@ -23,11 +23,29 @@ cc.Class({
 
 		cc.systemEvent.on('keydown', this.onKeyDown, this)
 		cc.systemEvent.on('keyup', this.onKeyUp, this)
+
+		// //开启碰撞监听
+		// cc.director.getCollisionManager().enabled = true
+		// //开启绘制碰撞组件的形状
+		// cc.director.getCollisionManager().enabledDebugDraw = true
+
+		// let check_node_collider = this.node.getComponent(cc.PolygonCollider)//拿到points多边形顶点数组
+		// console.log('check_node_collider: ', check_node_collider)
 	},
 	onDestroy() {
 		cc.systemEvent.off('keydown', this.onKeyDown, this)
 		cc.systemEvent.off('keyup', this.onKeyUp, this)
 	},
+
+	//碰撞控制类
+	// 当碰撞产生时调用
+	// onCollisionEnter: function (other, self) {},
+	// // 碰撞状态中调用
+	// onCollisionStay(other, self) {},
+	// // 碰撞结束时调用
+	// onCollisionExit(other, self) {},
+
+	//动作控制类
 	onKeyDown(e) {
 		Input[e.keyCode] = 1
 	},
@@ -69,21 +87,25 @@ cc.Class({
 				.by(1, { angle: -controlRotationAngle })
 				.repeatForever()
 				.start()
+			// cc.RevoluteJoint(this.node)
+			// 	.by(1, { angle: -controlRotationAngle })
+			// 	.repeatForever()
+			// 	.start()
 		} else {
 			return
 		}
 	},
 	toSmallHero() {
-        cc.tween(this.node)
-        .to(1, { scale: 0.8, position: cc.v2(10, 100) })
-        .start()
-        isBighero = false
+		cc.tween(this.node)
+			.to(1, { scale: 0.8, position: cc.v2(10, 100) })
+			.start()
+		isBighero = false
 	},
 	toBigHero() {
 		cc.tween(this.node)
 			.to(1, { scale: 5, position: cc.v2(10, 100) })
 			.start()
-            isBighero = true
+		isBighero = true
 	},
 	update(dt) {
 		this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
@@ -121,7 +143,7 @@ cc.Class({
 			this.sp.y += controlRatio
 		} else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
 			this.sp.y += -controlRatio
-		}  else {
+		} else {
 			this.sp.x = 0
 			this.sp.y = 0
 			rby = null
@@ -145,22 +167,20 @@ cc.Class({
 			// this.lv.y = 0
 		}
 
-
-        //控制技能等
-        if (Input[cc.macro.KEY.k]) {
-            if(isBighero){
-                heroMove = true
+		//控制技能等
+		if (Input[cc.macro.KEY.k]) {
+			if (isBighero) {
+				heroMove = true
 				this.toSmallHero()
-            }
-             
-		} 
-
-       if (Input[cc.macro.KEY.l]) {
-        if(!isBighero){
-        heroMove = true
-        this.toBigHero()
+			}
 		}
-    }
+
+		if (Input[cc.macro.KEY.l]) {
+			if (!isBighero) {
+				heroMove = true
+				this.toBigHero()
+			}
+		}
 		this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
 	},
 	start() {},
