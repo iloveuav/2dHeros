@@ -27,7 +27,7 @@ export default class NewClass extends cc.Component {
 		p.enabled = true //启用物理组件
 		// cc.director.getPhysicsManager().gravity = cc.v2(0，0);//无重力
 		p.gravity = cc.v2(0, -20) //每秒降落20个世界单位
-		cc.director.getPhysicsManager().debugDrawFlags = 3
+		// cc.director.getPhysicsManager().debugDrawFlags = 3
 		// this.initMapNode(this.mapNode);
 	}
 

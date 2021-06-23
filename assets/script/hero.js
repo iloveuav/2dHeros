@@ -103,7 +103,7 @@ cc.Class({
 	},
 	toBigHero() {
 		cc.tween(this.node)
-			.to(1, { scale: 5, position: cc.v2(10, 100) })
+			.to(1, { scale: 3, position: cc.v2(10, 100) })
 			.start()
 		isBighero = true
 	},

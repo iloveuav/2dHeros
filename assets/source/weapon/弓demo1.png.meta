@@ -1,0 +1,36 @@
+{
+  "ver": "2.3.4",
+  "uuid": "3cda01d4-a1e7-4fc5-8ac3-d11b5241a840",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "genMipmaps": false,
+  "packable": true,
+  "width": 221,
+  "height": 178,
+  "platformSettings": {},
+  "subMetas": {
+    "弓demo1": {
+      "ver": "1.0.4",
+      "uuid": "d9924d61-ea56-4bbb-98e9-a9124dce4982",
+      "rawTextureUuid": "3cda01d4-a1e7-4fc5-8ac3-d11b5241a840",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 221,
+      "height": 178,
+      "rawWidth": 221,
+      "rawHeight": 178,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
