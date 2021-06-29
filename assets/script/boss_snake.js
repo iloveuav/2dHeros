@@ -15,27 +15,29 @@ cc.Class({
 	properties: {},
 
 	onLoad() {
-        this.hp = 3
 		this._speed = 1
 		this.sp = cc.v2(0, 0)
 
 		this.heroState = State.stand
 		this.anima = 'idle'
-        this.heroAni = this.node.getComponent(cc.Animation)
 
-        this.heroAni.on('finished', (e, data) => {
+		cc.systemEvent.on('keydown', this.onKeyDown, this)
+		cc.systemEvent.on('keyup', this.onKeyUp, this)
+		cc.director.getCollisionManager().enabled = true
+
+		this.hp = 10
+		this.isHit = false
+		this.ani = this.node.getComponent(cc.Animation)
+
+		this.ani.on('finished', (e, data) => {
 			this.hp--
 			this.isHit = false
 			if (this.hp === 0) {
 				this.node.destroy()
 			}
 		})
-
-		cc.systemEvent.on('keydown', this.onKeyDown, this)
-		cc.systemEvent.on('keyup', this.onKeyUp, this)
-
 		// //开启碰撞监听
-		cc.director.getCollisionManager().enabled = true
+		// cc.director.getCollisionManager().enabled = true
 		// //开启绘制碰撞组件的形状
 		// cc.director.getCollisionManager().enabledDebugDraw = true
 
@@ -47,18 +49,19 @@ cc.Class({
 		cc.systemEvent.off('keyup', this.onKeyUp, this)
 	},
 
+	//碰撞控制类
 	// 当碰撞产生时调用
 	onCollisionEnter(other, self) {
 		console.log('other.node.group: ', other.node.group)
-		if (other.node.group === 'Boss' ) {
-			this.isHit = true
-			this.heroAni.play('hurt')
+
+		console.log('self: ', self)
+		if (self.tag !== 1) {
+			if (other.node.group === 'weapon') {
+				this.isHit = true
+				this.ani.play('hurt')
+			}
 		}
 	},
-
-	//碰撞控制类
-	// 当碰撞产生时调用
-	// onCollisionEnter: function (other, self) {},
 	// // 碰撞状态中调用
 	// onCollisionStay(other, self) {},
 	// // 碰撞结束时调用
@@ -109,29 +112,29 @@ cc.Class({
 		this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
 		//处理复合方向
 		if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.w]) {
-			this.sp.x += -controlRatio
-			this.sp.y += controlRatio
-			this.rotateLeft()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
 			this.sp.x += controlRatio
 			this.sp.y += controlRatio
 			this.rotateRight()
 			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
+		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
 			this.sp.x += controlRatio
+			this.sp.y += -controlRatio
+			this.rotateLeft()
+			heroMove = true
+		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
+			this.sp.x += +controlRatio
 			this.sp.y += -controlRatio
 			this.rotateRight()
 			heroMove = true
 		} else if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.s]) {
-			this.sp.x += -controlRatio
+			this.sp.x += +controlRatio
 			this.sp.y += -controlRatio
-			this.rotateLeft()
+			this.rotateRight()
 			heroMove = true
 		} else if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
 			this.sp.x += -controlRatio
 
-			this.rotateLeft()
+			this.rotateRight()
 			heroMove = true
 		} else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
 			this.sp.x += controlRatio
@@ -140,7 +143,7 @@ cc.Class({
 		} else if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
 			this.sp.y += controlRatio
 		} else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
-			this.sp.y += -controlRatio
+			this.sp.y = -controlRatio
 		} else {
 			this.sp.x = 0
 			this.sp.y = 0
