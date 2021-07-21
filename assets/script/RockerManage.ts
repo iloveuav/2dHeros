@@ -20,7 +20,7 @@ export default class NewClass extends cc.Component {
 	parent: cc.Node = null //摇杆和背景的父节点
 
 	@property
-	max_R: number = 135 //摇杆移动的最大半径
+	max_R: number = 150 //摇杆移动的最大半径
 
 	@property
 	speed: number = 10 //角色移动速度
@@ -71,7 +71,7 @@ export default class NewClass extends cc.Component {
 			this.camera.y = this.player.y + this.offset.y
 			//  this.camera.anchorX = 0.5
 
-			console.log('lv.x: ', lv.x)
+			// console.log('lv.x: ', lv.x)
 
 			// console.log('this.camera: ', this.camera);
 		}

@@ -12,18 +12,22 @@ let heroMove = false
 let isBighero = false
 cc.Class({
 	extends: cc.Component,
-	properties: {},
+	properties: {
+		sword: cc.Node,
+	},
 
 	onLoad() {
-        this.hp = 3
+		this.hp = 3
 		this._speed = 1
 		this.sp = cc.v2(0, 0)
 
+		this.canShoot = true
+
 		this.heroState = State.stand
 		this.anima = 'idle'
-        this.heroAni = this.node.getComponent(cc.Animation)
+		this.heroAni = this.node.getComponent(cc.Animation)
 
-        this.heroAni.on('finished', (e, data) => {
+		this.heroAni.on('finished', (e, data) => {
 			this.hp--
 			this.isHit = false
 			if (this.hp === 0) {
@@ -50,9 +54,11 @@ cc.Class({
 	// 当碰撞产生时调用
 	onCollisionEnter(other, self) {
 		console.log('other.node.group: ', other.node.group)
-		if (other.node.group === 'Boss' ) {
+		this.isHit = true
+		this.heroAni.play('hurt')
+		if (other.node.group === 'Boss') {
 			this.isHit = true
-			this.heroAni.play('hurt')
+			this.heroAni.play('testshot')
 		}
 	},
 
@@ -181,6 +187,26 @@ cc.Class({
 		this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
 	},
 	start() {},
+	//飞刀
+	heroShoot() {
+	
+		if (this.canShoot) {
+            console.log('shoot: ',this.sword)
+		
+			this.sword.active = true
+			this.sword._active = true
+		// 奇怪的技能
+cc.tween(this.sword)
+// //to,在第一秒的时候放大为2倍，位置为(100,100),角度变化到120
+.to(1,{scale:2,position:cc.v2(100,100),rotation:120})
+// //by,在第二秒时，缩放变化1.5倍，即最终放大为原始大小的3倍，位置变化了(100,100)，即现在位置为(200,200)
+.by(1,{scale:1.5,position:cc.v2(100,100)})
+// //在第三秒时缩放为原来的大小，位置设置为(0,0)，然后加了一个缓动效果backOut
+.to(1,{scale:1,position:cc.v2(0,0)},{easing:"backOut"})
+.start();
+		
+		}
+	},
 })
 
 //收集

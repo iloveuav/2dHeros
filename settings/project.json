@@ -13,7 +13,7 @@
     ],
     [
       false,
-      false,
+      true,
       true,
       false,
       true
@@ -52,7 +52,7 @@
     "3D Physics/Builtin",
     "SafeArea"
   ],
-  "last-module-event-record-time": 1626099349758,
+  "last-module-event-record-time": 1626803404455,
   "design-resolution-width": 960,
   "design-resolution-height": 640,
   "fit-width": false,
