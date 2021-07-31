@@ -25,7 +25,7 @@ cc.Class({
 		cc.systemEvent.on('keyup', this.onKeyUp, this)
 		cc.director.getCollisionManager().enabled = true
 
-		this.hp = 10
+		this.hp = 1000
 		this.isHit = false
 		this.ani = this.node.getComponent(cc.Animation)
 
@@ -43,22 +43,45 @@ cc.Class({
 
 		// let check_node_collider = this.node.getComponent(cc.PolygonCollider)//拿到points多边形顶点数组
 		// console.log('check_node_collider: ', check_node_collider)
+
+        this.game = this.node.parent.getComponent("game");
+
 	},
 	onDestroy() {
 		cc.systemEvent.off('keydown', this.onKeyDown, this)
 		cc.systemEvent.off('keyup', this.onKeyUp, this)
 	},
 
+    //受到攻击时
+    // uatt(att){
+    //     //执行game里面的showHit涵数
+    //     //txt的初始坐示，是敌人的坐标一样，高度是敌人的y坐标加上高度
+    //     if(this.node.isDie) return; //如果已经死了，就不往下执行了
+    //     this.node.stopAllActions();
+    //     this.ROLE.hp-=att; //敌人的HP减去等于
+    //     if(this.ROLE.hp<=0){
+    //         //如果敌人已经死亡
+    //         this.removeOn();
+    //         this.node.isDie = true;
+    //         this.dbDisplay.playAnimation("die"); //播放死亡动
+    //         this.scheduleOnce(()=>{
+    //             this.node.destroy();
+    //         },2);
+    //         return;//不再往下执行了
+    //     }
+    //     this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
+    //     if(this.State != COM.State.ATTACK) this.dbArmature.animation.fadeIn("hit",-1,-1,0, ANI_GROUP);
+    // },
+
 	//碰撞控制类
 	// 当碰撞产生时调用
 	onCollisionEnter(other, self) {
-		console.log('other.node.group: ', other.node.group)
-
-		console.log('self: ', self)
 		if (self.tag !== 1) {
 			if (other.node.group === 'weapon') {
 				this.isHit = true
 				this.ani.play('hurt')
+                this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
+                this.uatt(10)
 			}
 		}
 	},
