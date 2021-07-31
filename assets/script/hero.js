@@ -12,6 +12,18 @@ const skinList = ['hcr', 'swordMan']
 let angle = 0
 let heroMove = false
 let isBighero = false
+let ROLE = {
+    att: 30,
+    wepId: 0,
+    //当前武器ID
+    hp: 200,
+    totalHp: 200,
+    //总体力
+    dodgeLen: 200,
+    //回避距离
+    dodgeSpeed: 20 //
+
+  };
 cc.Class({
 	extends: cc.Component,
 	properties: {
@@ -25,20 +37,9 @@ cc.Class({
     //初始化角色
   init: function init() {
     //主角的属性
-    this.ROLE = {
-      att: 30,
-      wepId: 0,
-      //当前武器ID
-      hp: 200,
-      totalHp: 200,
-      //总体力
-      dodgeLen: 200,
-      //回避距离
-      dodgeSpeed: 20 //
-
-    };
-    this.idleAni();
-    this.updateWep(); //接下来，我们要绑定按钮的事件
+   
+    // this.idleAni();
+    // this.updateWep(); //接下来，我们要绑定按钮的事件
     //接下来，开始角色的移动
   },
 
@@ -46,7 +47,7 @@ cc.Class({
 		ROLE.hp = 3
 		this._speed = 1
 
-        this.init(); //初始化角色
+        // this.init(); //初始化角色
 		this.sp = cc.v2(0, 0)
 
 		this.canShoot = true
@@ -58,15 +59,15 @@ cc.Class({
 		//默认为剑仙
 		this.defSkinId = 1
 
-		this.heroAni.on('finished', (e, data) => {
-			ROLE.hp--
-			this.isHit = false
-			if (ROLE.hp === 0) {
-				this.node.destroy()
-			}
-		    this.Arrow.active = false
-			this.Arrow._active = false   
-		})
+		// this.heroAni.on('finished', (e, data) => {
+		// 	ROLE.hp--
+		// 	this.isHit = false
+		// 	if (ROLE.hp === 0) {
+		// 		this.node.destroy()
+		// 	}
+		//     this.Arrow.active = false
+		// 	this.Arrow._active = false   
+		// })
 
 		cc.systemEvent.on('keydown', this.onKeyDown, this)
 		cc.systemEvent.on('keyup', this.onKeyUp, this)
@@ -149,83 +150,83 @@ cc.Class({
 	},
 	update(dt) {
 		// console.log('this.hero.getComponent(cc.RigidBody): ', this.node.getComponent(cc.RigidBody));
-		if (this.node.getComponent(cc.RigidBody)) {
-			this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
-		}
-		//处理复合方向
-		if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.w]) {
-			this.sp.x += -controlRatio
-			this.sp.y += controlRatio
-			this.rotateLeft()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
-			this.sp.x += controlRatio
-			this.sp.y += controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
-			this.sp.x += controlRatio
-			this.sp.y += -controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.s]) {
-			this.sp.x += -controlRatio
-			this.sp.y += -controlRatio
-			this.rotateLeft()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
-			this.sp.x += -controlRatio
+		// if (this.node.getComponent(cc.RigidBody)) {
+		// 	this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
+		// }
+		// //处理复合方向
+		// if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.w]) {
+		// 	this.sp.x += -controlRatio
+		// 	this.sp.y += controlRatio
+		// 	this.rotateLeft()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
+		// 	this.sp.x += controlRatio
+		// 	this.sp.y += controlRatio
+		// 	this.rotateRight()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
+		// 	this.sp.x += controlRatio
+		// 	this.sp.y += -controlRatio
+		// 	this.rotateRight()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.s]) {
+		// 	this.sp.x += -controlRatio
+		// 	this.sp.y += -controlRatio
+		// 	this.rotateLeft()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
+		// 	this.sp.x += -controlRatio
 
-			this.rotateLeft()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
-			this.sp.x += controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
-			this.sp.y += controlRatio
-		} else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
-			this.sp.y += -controlRatio
-		} else {
-			this.sp.x = 0
-			this.sp.y = 0
-			setTimeout(() => {
-				if (!heroMove) {
-					this.node.stopAllActions()
-				}
-			}, 300)
-			heroMove = false
-		}
+		// 	this.rotateLeft()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
+		// 	this.sp.x += controlRatio
+		// 	this.rotateRight()
+		// 	heroMove = true
+		// } else if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
+		// 	this.sp.y += controlRatio
+		// } else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
+		// 	this.sp.y += -controlRatio
+		// } else {
+		// 	this.sp.x = 0
+		// 	this.sp.y = 0
+		// 	setTimeout(() => {
+		// 		if (!heroMove) {
+		// 			this.node.stopAllActions()
+		// 		}
+		// 	}, 300)
+		// 	heroMove = false
+		// }
 
-		if (this.sp.x) {
-			this.lv.x += this.sp.x * this._speed
-		} else {
-			// this.lv.x = 0
-		}
+		// if (this.sp.x) {
+		// 	this.lv.x += this.sp.x * this._speed
+		// } else {
+		// 	// this.lv.x = 0
+		// }
 
-		if (this.sp.y) {
-			this.lv.y += this.sp.y * this._speed
-		} else {
-			// this.lv.y = 0
-		}
+		// if (this.sp.y) {
+		// 	this.lv.y += this.sp.y * this._speed
+		// } else {
+		// 	// this.lv.y = 0
+		// }
 
-		//控制技能等
-		if (Input[cc.macro.KEY.k]) {
-			if (isBighero) {
-				heroMove = true
-				this.toSmallHero()
-			}
-		}
+		// //控制技能等
+		// if (Input[cc.macro.KEY.k]) {
+		// 	if (isBighero) {
+		// 		heroMove = true
+		// 		this.toSmallHero()
+		// 	}
+		// }
 
-		if (Input[cc.macro.KEY.l]) {
-			if (!isBighero) {
-				heroMove = true
-				this.toBigHero()
-			}
-		}
-		if (this.node.getComponent(cc.RigidBody)) {
-			this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
-		}
+		// if (Input[cc.macro.KEY.l]) {
+		// 	if (!isBighero) {
+		// 		heroMove = true
+		// 		this.toBigHero()
+		// 	}
+		// }
+		// if (this.node.getComponent(cc.RigidBody)) {
+		// 	this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
+		// }
 	},
 	start() {},
 	//飞刀

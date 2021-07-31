@@ -2473,9 +2473,7 @@
     "Sword": null,
     "Arrow": null,
     "Bow": null,
-    "hero": {
-      "__id__": 31
-    },
+    "hero": null,
     "_id": "d14vWtbQFIoJv5edFkAMJC"
   },
   {
@@ -5380,9 +5378,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "7937ccee-90f6-4a39-b530-289fb3e2f9bd"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -5474,9 +5470,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "7937ccee-90f6-4a39-b530-289fb3e2f9bd"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -13507,9 +13501,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "e4167a0c-dab0-4a6c-b198-f542767fe4a2"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -13552,9 +13544,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "f2a9518b-0e0d-4ded-b683-858256647d98"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 2,
     "_fillType": 0,
