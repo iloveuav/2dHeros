@@ -5,7 +5,8 @@
     "wall",
     "weapon",
     "Boss",
-    "UI"
+    "UI",
+    "dogface"
   ],
   "collision-matrix": [
     [
@@ -16,6 +17,8 @@
       true,
       true,
       false,
+      true,
+      null,
       true
     ],
     [
@@ -23,6 +26,8 @@
       true,
       false,
       true,
+      true,
+      null,
       true
     ],
     [
@@ -30,6 +35,8 @@
       false,
       true,
       false,
+      true,
+      null,
       true
     ],
     [
@@ -43,6 +50,15 @@
       false,
       false,
       false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      true,
+      true,
+      true,
       false,
       false,
       false
@@ -52,7 +68,7 @@
     "3D Physics/Builtin",
     "SafeArea"
   ],
-  "last-module-event-record-time": 1626803404455,
+  "last-module-event-record-time": 1629675579878,
   "design-resolution-width": 960,
   "design-resolution-height": 640,
   "fit-width": false,

@@ -50,7 +50,7 @@
     "skipRecord": false
   },
   "appBundle": false,
-  "mainCompressionType": "default",
+  "mainCompressionType": "subpackage",
   "mainIsRemote": false,
   "nativeMd5Cache": true,
   "agreements": {}

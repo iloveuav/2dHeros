@@ -12,7 +12,9 @@ let heroMove = false
 let isBighero = false
 cc.Class({
 	extends: cc.Component,
-	properties: {},
+	properties: {
+		Hero: cc.Node,
+	},
 
 	onLoad() {
 		this._speed = 1
@@ -25,7 +27,7 @@ cc.Class({
 		cc.systemEvent.on('keyup', this.onKeyUp, this)
 		cc.director.getCollisionManager().enabled = true
 
-		this.hp = 1000
+		this.hp = 1
 		this.isHit = false
 		this.ani = this.node.getComponent(cc.Animation)
 
@@ -44,44 +46,44 @@ cc.Class({
 		// let check_node_collider = this.node.getComponent(cc.PolygonCollider)//拿到points多边形顶点数组
 		// console.log('check_node_collider: ', check_node_collider)
 
-        this.game = this.node.parent.getComponent("game");
-
+		this.game = this.node.parent.getComponent('game')
 	},
 	onDestroy() {
 		cc.systemEvent.off('keydown', this.onKeyDown, this)
 		cc.systemEvent.off('keyup', this.onKeyUp, this)
 	},
 
-    //受到攻击时
-    // uatt(att){
-    //     //执行game里面的showHit涵数
-    //     //txt的初始坐示，是敌人的坐标一样，高度是敌人的y坐标加上高度
-    //     if(this.node.isDie) return; //如果已经死了，就不往下执行了
-    //     this.node.stopAllActions();
-    //     this.ROLE.hp-=att; //敌人的HP减去等于
-    //     if(this.ROLE.hp<=0){
-    //         //如果敌人已经死亡
-    //         this.removeOn();
-    //         this.node.isDie = true;
-    //         this.dbDisplay.playAnimation("die"); //播放死亡动
-    //         this.scheduleOnce(()=>{
-    //             this.node.destroy();
-    //         },2);
-    //         return;//不再往下执行了
-    //     }
-    //     this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
-    //     if(this.State != COM.State.ATTACK) this.dbArmature.animation.fadeIn("hit",-1,-1,0, ANI_GROUP);
-    // },
+	//受到攻击时
+	// uatt(att){
+	//     //执行game里面的showHit涵数
+	//     //txt的初始坐示，是敌人的坐标一样，高度是敌人的y坐标加上高度
+	//     if(this.node.isDie) return; //如果已经死了，就不往下执行了
+	//     this.node.stopAllActions();
+	//     this.ROLE.hp-=att; //敌人的HP减去等于
+	//     if(this.ROLE.hp<=0){
+	//         //如果敌人已经死亡
+	//         this.removeOn();
+	//         this.node.isDie = true;
+	//         this.dbDisplay.playAnimation("die"); //播放死亡动
+	//         this.scheduleOnce(()=>{
+	//             this.node.destroy();
+	//         },2);
+	//         return;//不再往下执行了
+	//     }
+	//     this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
+	//     if(this.State != COM.State.ATTACK) this.dbArmature.animation.fadeIn("hit",-1,-1,0, ANI_GROUP);
+	// },
 
 	//碰撞控制类
 	// 当碰撞产生时调用
 	onCollisionEnter(other, self) {
-		if (self.tag !== 1) {
+        //0:尾巴 1:头或身体
+		if (self.tag === 0||self.tag === 1) {
 			if (other.node.group === 'weapon') {
 				this.isHit = true
 				this.ani.play('hurt')
-                this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
-                this.uatt(10)
+				// this.game.showHit(att,cc.v2(this.node.x, this.node.y + this.node.height));
+				// this.uatt(10)
 			}
 		}
 	},
@@ -132,79 +134,34 @@ cc.Class({
 		isBighero = true
 	},
 	update(dt) {
-		this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
-		//处理复合方向
-		if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.w]) {
-			this.sp.x += controlRatio
-			this.sp.y += controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.w]) {
-			this.sp.x += controlRatio
-			this.sp.y += -controlRatio
-			this.rotateLeft()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] && Input[cc.macro.KEY.s]) {
-			this.sp.x += +controlRatio
-			this.sp.y += -controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.a] && Input[cc.macro.KEY.s]) {
-			this.sp.x += +controlRatio
-			this.sp.y += -controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.a] || Input[cc.macro.KEY.left]) {
-			this.sp.x += -controlRatio
+        // 	let lv2 = this.node.getComponent(cc.RigidBody).linearVelocity
+		// lv2.x -= 5 * this.speed
+		// lv2.y -= 5 * this.speed
+		// this.node.getComponent(cc.RigidBody).linearVelocity = lv2
 
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.d] || Input[cc.macro.KEY.right]) {
-			this.sp.x += controlRatio
-			this.rotateRight()
-			heroMove = true
-		} else if (Input[cc.macro.KEY.w] || Input[cc.macro.KEY.up]) {
-			this.sp.y += controlRatio
-		} else if (Input[cc.macro.KEY.s] || Input[cc.macro.KEY.down]) {
-			this.sp.y = -controlRatio
-		} else {
-			this.sp.x = 0
-			this.sp.y = 0
-			setTimeout(() => {
-				if (!heroMove) {
-					this.node.stopAllActions()
-				}
-			}, 300)
-			heroMove = false
-		}
+		// this.sp.x += -controlRatio
+		// this.sp.y += controlRatio
+		
+        // if (this.sp.x) {
+		// 	this.lv.x += this.sp.x * this._speed
+		// } else {
+		// 	this.lv.x = 0
+		// }
 
-		if (this.sp.x) {
-			this.lv.x += this.sp.x * this._speed
-		} else {
-			// this.lv.x = 0
-		}
+		// if (this.sp.y) {
+		// 	this.lv.y += this.sp.y * this._speed
+		// } else {
+		// 	this.lv.y = 0
+		// }
+        // if (this.node.getComponent(cc.RigidBody)) {
+		// 	this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
+		// }
 
-		if (this.sp.y) {
-			this.lv.y += this.sp.y * this._speed
-		} else {
-			// this.lv.y = 0
-		}
 
-		//控制技能等
-		if (Input[cc.macro.KEY.k]) {
-			if (isBighero) {
-				heroMove = true
-				this.toSmallHero()
-			}
-		}
+		// let followAction = cc.follow(this.Hero, cc.rect(60, 60, 60, 60));
 
-		if (Input[cc.macro.KEY.l]) {
-			if (!isBighero) {
-				heroMove = true
-				this.toBigHero()
-			}
-		}
-		this.node.getComponent(cc.RigidBody).linearVelocity = this.lv
+		// console.log('followAction: ',this.node );
+		// this.node.runAction(followAction);
 	},
 	start() {},
 })

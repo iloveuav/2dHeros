@@ -27,7 +27,7 @@ cc.Class({
             this.nodeTouch.getComponent('Touch').setStartPos(pos);            
 
             // 武器
-            this.nodeWeapon.getComponent('Weapon').prepare();
+            this.nodeWeapon.getComponent('WeaponManage').prepare();
         });
 
         this.node.on(cc.Node.EventType.TOUCH_MOVE, event => {
@@ -38,7 +38,7 @@ cc.Class({
 
             // 武器
             cc.log(jsTouch.getForce());
-            this.nodeWeapon.getComponent('Weapon').setForce(jsTouch.getForce());
+            this.nodeWeapon.getComponent('WeaponManage').setForce(jsTouch.getForce());
             this.nodeWeapon.rotation = this.nodeTouch.rotation;
         });
 
@@ -46,7 +46,7 @@ cc.Class({
             // 方向           
             this.nodeTouch.active = false;
             // 武器
-            this.nodeWeapon.getComponent('Weapon').fire();
+            this.nodeWeapon.getComponent('WeaponManage').fire();
         });
     },
 
@@ -76,7 +76,7 @@ cc.Class({
     onClick(event, data){
         switch(data){
             case 'test':{
-                this.nodeWeapon.getComponent('Weapon').fire();
+                this.nodeWeapon.getComponent('WeaponManage').fire();
                 break;
             }
         }

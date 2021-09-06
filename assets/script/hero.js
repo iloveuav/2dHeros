@@ -7,7 +7,8 @@ const controlRatio = 0.005 //控制系数
 const controlRotationAngle = 45 //控制角度
 const controlRotaDurTime = 0.8 //旋转时间
 
-const skinList = ['hcr', 'swordMan']
+const skinList = ['hurt', 'testshot']
+let heroIndex = 0
 
 let angle = 0
 let heroMove = false
@@ -47,6 +48,8 @@ cc.Class({
 		ROLE.hp = 3
 		this._speed = 1
 
+        this.dt = 0
+
         // this.init(); //初始化角色
 		this.sp = cc.v2(0, 0)
 
@@ -58,6 +61,8 @@ cc.Class({
 
 		//默认为剑仙
 		this.defSkinId = 1
+
+        this.node.isDie = false;
 
 		// this.heroAni.on('finished', (e, data) => {
 		// 	ROLE.hp--
@@ -88,12 +93,17 @@ cc.Class({
 
 	// 当碰撞产生时调用
 	onCollisionEnter(other, self) {
-		console.log('other.node.group: ', other.node.group)
 		this.isHit = true
-		this.heroAni.play('hurt')
-		if (other.node.group === 'Boss') {
+		if (other.node.group === 'Boss'||other.node.group === 'dogface') {
 			this.isHit = true
-			this.heroAni.play('hurt')
+            ROLE.hp--;
+            this.heroAni.play('hurt')
+            if(ROLE.hp<=0){
+                this.node.isDie = true;
+                this.node.destroy()
+            }
+            
+			// this.heroAni.play('hurt')
             // this.uatt('30')
             // enemy.getComponent("enemy").uatt(this.ROLE.att);
 		}
@@ -149,6 +159,7 @@ cc.Class({
 		isBighero = true
 	},
 	update(dt) {
+        this.dt = dt
 		// console.log('this.hero.getComponent(cc.RigidBody): ', this.node.getComponent(cc.RigidBody));
 		// if (this.node.getComponent(cc.RigidBody)) {
 		// 	this.lv = this.node.getComponent(cc.RigidBody).linearVelocity
@@ -233,7 +244,7 @@ cc.Class({
 	heroShoot() {
 		if (this.canShoot) {
 			// console.log('shoot: ', this.Sword)
-			this.heroAni.play('testshot')
+			// this.heroAni.play('testshot')
 			this.Sword.active = true
 			this.Sword._active = true
 			// this.Arrow.active = true
@@ -251,6 +262,8 @@ cc.Class({
 				{ easing: 'backOut' }
 			)
 			.start()
+            // const w = 90 //设置角速度为120度/秒
+            // this.Sword.angle+=w*this.dt
 
 console.log('this.hero: ', this.hero.position);
 
@@ -286,7 +299,9 @@ console.log('this.hero: ', this.hero.position);
 		}
 	},
 	changeSkin() {
-		console.log('changeSkin: ')
+        const curHero = skinList[(heroIndex++)%skinList.length];
+        this.heroAni.play(curHero)
+		console.log('changeSkin: ',curHero)
 		// 	this.defSkinId =
 		// 		this.defSkinId < skinList.length - 1 ? this.defSkinId + 1 : 0
 		// let skinName = skinList[this.defSkinId]

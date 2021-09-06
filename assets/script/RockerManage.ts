@@ -39,7 +39,7 @@ export default class NewClass extends cc.Component {
 	is_forbidden: boolean = false //是否禁用摇杆
 
 	private offset: cc.Vec2 = cc.v2(0, 0)
-	private zoomRatio: number = 1
+	private zoomRatio: number = 0.8
 
 	onLoad() {
 		//绑定事件
@@ -76,24 +76,19 @@ export default class NewClass extends cc.Component {
 			// console.log('this.camera: ', this.camera);
 		}
 
-		let lv2 = this.Boos.getComponent(cc.RigidBody).linearVelocity
-		lv2.x -= this.vector.x * this.speed
-		lv2.y -= this.vector.y * this.speed
-		this.Boos.getComponent(cc.RigidBody).linearVelocity = lv2
+        //控制蛇反方向移动
+		// let lv2 = this.Boos.getComponent(cc.RigidBody).linearVelocity
+		// lv2.x -= this.vector.x * this.speed
+		// lv2.y -= this.vector.y * this.speed
+		// this.Boos.getComponent(cc.RigidBody).linearVelocity = lv2
 		// // -----------------
 		// let x = this.player.x + this.vector.x;
 		// let y = this.player.y + this.vector.y;//每帧获取角色的坐标加上移动向量
 
 		// this.player.position = cc.v3(x, y);//让角色的坐标每帧为自身的坐标加上移动的向量
 
-		// //求出角色的旋转角度
-		// if(this.vector.y < 0){//当摇杆在原点下方时
-		//     //角度是负的
-		//     this.rotation = (-this.vector.angle(cc.v2(1, 0))) / Math.PI * 180;//根据向量先求出弧度，再求出角度
-		// }else{//如果摇杆在原点上方时
-		//     //角度是正的
-		//     this.rotation = (this.vector.angle(cc.v2(1, 0))) / Math.PI * 180;//根据向量先求出弧度，再求出角度
-		// }
+		
+	
 	}
 
 	move(event: cc.Event.EventTouch) {
@@ -110,8 +105,8 @@ export default class NewClass extends cc.Component {
 				this.joystick.x = pos_0.x //摇杆的坐标为触点坐标
 				this.joystick.y = pos_0.y
 				this.zoomRatio += 0.005
-				if (this.zoomRatio >= 1.5) {
-					this.zoomRatio = 1.5
+				if (this.zoomRatio >= 0.6) {
+					this.zoomRatio = 0.6
 				}
 				this.camera.getComponent(cc.Camera).zoomRatio = this.zoomRatio
 			} else {
@@ -123,8 +118,8 @@ export default class NewClass extends cc.Component {
 				this.joystick.x = x //给摇杆坐标赋值
 				this.joystick.y = y
 				this.zoomRatio -= 0.005
-				if (this.zoomRatio <= 0.5) {
-					this.zoomRatio = 0.5
+				if (this.zoomRatio <= 0.2) {
+					this.zoomRatio = 0.2
 				}
 				this.camera.getComponent(cc.Camera).zoomRatio = this.zoomRatio
 			}
@@ -139,9 +134,20 @@ export default class NewClass extends cc.Component {
 
 			this.vector.x = dir.x * this.speed //给移动向量赋值
 			this.vector.y = dir.y * this.speed //移动向量为方向 × 速度
-			// if(this.is_rotation == true){//如果角色可以旋转
-			//     this.player.angle = this.rotation;//根据摇杆的方向旋转角色
-			// }
+
+            // //求出角色的旋转角度
+        if(this.vector){
+            if(this.vector.y < 0){//当摇杆在原点下方时
+                //角度是负的
+                this.rotation = (-this.vector.angle(cc.v2(1, 0))) / Math.PI * 180;//根据向量先求出弧度，再求出角度
+            }else{//如果摇杆在原点上方时
+                //角度是正的
+                this.rotation = (this.vector.angle(cc.v2(1, 0))) / Math.PI * 180;//根据向量先求出弧度，再求出角度
+            }
+        }
+			if(this.is_rotation == true){//如果角色可以旋转
+			    this.player.angle = this.rotation;//根据摇杆的方向旋转角色
+			}
 		}
 	}
 

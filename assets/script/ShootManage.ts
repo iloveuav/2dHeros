@@ -24,7 +24,7 @@ export default class NewClass extends cc.Component {
 	parent: cc.Node = null //摇杆和背景的父节点
 
 	@property
-	max_R: number = 150 //摇杆移动的最大半径
+	max_R: number = 450 //摇杆移动的最大半径
 
 	@property
 	speed: number = 10 //角色移动速度
@@ -113,10 +113,10 @@ export default class NewClass extends cc.Component {
 				//如果触点长度小于我们规定好的最大半径
 				this.joystick.x = pos_0.x //摇杆的坐标为触点坐标
 				this.joystick.y = pos_0.y
-				this.zoomRatio += 0.005
-				if (this.zoomRatio >= 1.5) {
-					this.zoomRatio = 1.5
-				}
+				// this.zoomRatio += 0.005
+				// if (this.zoomRatio >= 1.5) {
+				// 	this.zoomRatio = 1.5
+				// }
 				// this.camera.getComponent(cc.Camera).zoomRatio = this.zoomRatio
 			} else {
 				//如果不
@@ -124,12 +124,12 @@ export default class NewClass extends cc.Component {
 				let x = pos.x * this.max_R //归一化的触点坐标 × 最大半径
 				let y = pos.y * this.max_R
 
-				this.joystick.x = x //给摇杆坐标赋值
-				this.joystick.y = y
-				this.zoomRatio -= 0.005
-				if (this.zoomRatio <= 0.5) {
-					this.zoomRatio = 0.5
-				}
+				// this.joystick.x = x //给摇杆坐标赋值
+				// this.joystick.y = y
+				// this.zoomRatio -= 0.005
+				// if (this.zoomRatio <= 0.5) {
+				// 	this.zoomRatio = 0.5
+				// }
 				// this.camera.getComponent(cc.Camera).zoomRatio = this.zoomRatio
 			}
 		}
